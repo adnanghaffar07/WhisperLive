@@ -33,6 +33,7 @@ class ServeClientFasterWhisper(ServeClientBase):
         same_output_threshold=7,
         cache_path="~/.cache/whisper-live/",
         translation_queue=None,
+        is_multilingual: bool = False,
     ):
         """
         Initialize a ServeClient instance.
@@ -64,6 +65,7 @@ class ServeClientFasterWhisper(ServeClientBase):
             same_output_threshold,
             translation_queue
         )
+        self.is_multilingual = is_multilingual
         self.cache_path = cache_path
         self.model_sizes = [
             "tiny", "tiny.en", "base", "base.en", "small", "small.en",
@@ -207,10 +209,12 @@ class ServeClientFasterWhisper(ServeClientBase):
         result, info = self.transcriber.transcribe(
             input_sample,
             initial_prompt=self.initial_prompt,
-            language=self.language,
+            language=None,
             task=self.task,
             vad_filter=self.use_vad,
-            vad_parameters=self.vad_parameters if self.use_vad else None)
+            vad_parameters=self.vad_parameters if self.use_vad else None,
+            multilingual=self.is_multilingual,
+        )
         if ServeClientFasterWhisper.SINGLE_MODEL:
             ServeClientFasterWhisper.SINGLE_MODEL_LOCK.release()
 

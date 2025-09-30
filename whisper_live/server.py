@@ -251,7 +251,6 @@ class TranscriptionServer:
                     options["model"] = faster_whisper_custom_model_path
                 client = ServeClientFasterWhisper(
                     websocket,
-                    language=options["language"],
                     task=options["task"],
                     client_uid=options["uid"],
                     model=options["model"],
